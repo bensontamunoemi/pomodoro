@@ -1,6 +1,16 @@
 import math
+import sys
+import os
 from tkinter import *
 import pygame
+
+
+# ---------------------------- PATH SETUP FOR BUNDLED APPLICATION ------------------------------- #
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
@@ -20,7 +30,8 @@ pygame.mixer.init()
 
 # ---------------------------- SOUND CONTROL ------------------------------- #
 def play_sound():
-    pygame.mixer.music.load('emergency.mp3')
+    sound_path = resource_path('emergency.mp3')  # Use resource_path to get the correct path
+    pygame.mixer.music.load(sound_path)
     pygame.mixer.music.play(-1)  # Play indefinitely
 
 
@@ -102,11 +113,14 @@ window.title("Pomodoro")
 window.config(padx=100, pady=50, bg=YELLOW)
 window.resizable(False, False)
 
+# Use resource_path to get the correct path for tomato.png
+tomato_img_path = resource_path('tomato.png')
+
 title_label = Label(text="Timer", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 60, "bold"))
 title_label.grid(column=1, row=0)
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
-tomato_image = PhotoImage(file="tomato.png")
+tomato_image = PhotoImage(file=tomato_img_path)  # Updated path for tomato.png
 canvas.create_image(100, 112, image=tomato_image)
 timer_text = canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
 canvas.grid(column=1, row=1)
